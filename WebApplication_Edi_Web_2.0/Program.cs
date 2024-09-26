@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using WebApplication_Edi_Web_2._0.Conf_Db_With_Entity;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApplication_Edi_Web_2._0
 {
@@ -16,19 +17,20 @@ namespace WebApplication_Edi_Web_2._0
             builder.Services.AddRazorPages();
 
 
-            // Add and configure DbContext to use connection string To Database by any class.
+            // Add DbContext to represents a session with the database by Entity Framework Core.
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
-            }
-                );
+            });
 
-           /* builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<AppDbContext>(); */
+            // Add Identity Framework Core & Setting for "ApplicationUser"
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            builder.Services.AddDefaultIdentity<ApplicationUser>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+            //.AddRoles<IdentityRole>()
 
             var app = builder.Build();
 

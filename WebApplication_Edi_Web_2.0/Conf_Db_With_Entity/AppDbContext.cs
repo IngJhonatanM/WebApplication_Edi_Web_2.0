@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
 
-
-// This class "ApplicationDbContext" Connect to the database using "Entity Framework"
+/* This class "AppDbContext" extends "Entity Framework" represents a session with the database
+// and can be used to query and save instances of entities.*/
 
 namespace WebApplication_Edi_Web_2._0.Conf_Db_With_Entity
 {
@@ -12,7 +12,7 @@ namespace WebApplication_Edi_Web_2._0.Conf_Db_With_Entity
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
-
+             
         }
 
         // Using dbcontext to assign roles
@@ -37,5 +37,3 @@ namespace WebApplication_Edi_Web_2._0.Conf_Db_With_Entity
 
     }
 }
-
-// This class "ApplicationDbContext" will be a service so that it can be used by other classes. This class "ApplicationDbContext" extends "Entity Framework"
