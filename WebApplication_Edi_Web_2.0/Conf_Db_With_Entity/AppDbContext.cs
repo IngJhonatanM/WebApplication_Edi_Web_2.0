@@ -15,7 +15,7 @@ namespace WebApplication_Edi_Web_2._0.Conf_Db_With_Entity
              
         }
 
-        // Using dbcontext to assign roles
+        // Using dbcontext to create roles
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

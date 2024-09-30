@@ -28,9 +28,9 @@ namespace WebApplication_Edi_Web_2._0
             // Add Identity Framework Core & Setting for "ApplicationUser"
 
             builder.Services.AddDefaultIdentity<ApplicationUser>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
-            //.AddRoles<IdentityRole>()
+            .AddDefaultTokenProviders()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>();
 
             var app = builder.Build();
 

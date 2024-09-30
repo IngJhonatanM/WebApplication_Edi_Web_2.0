@@ -2,13 +2,13 @@
 @model ManageUsersViewModel
 
 @{
-    ViewData["Title"] = "Manage users";
+    ViewData["Title"] = "Manager users";
 }
 
+<br />
 <h2>@ViewData["Title"]</h2>
 
-<h3>Administrators</h3>
-
+<h3>Administrators</h3> <br />
 <table class="table">
     <thead>
         <tr>
@@ -17,7 +17,7 @@
         </tr>
     </thead>
 
-    @foreach (var user in Model.Administrators)
+    @foreach (var user in Model.Admin)
     {
         <tr>
             <td>@user.Id</td>
@@ -43,4 +43,7 @@
             <td>@user.Email</td>
         </tr>
     }
+    <a class="btn btn-sm btn-primary" asp-action="Create" >
+        Create
+    </a>
 </table>
