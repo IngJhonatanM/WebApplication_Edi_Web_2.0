@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Login_EdiWeb\**" />
+    <Content Remove="Models\Login_EdiWeb\**" />
+    <EmbeddedResource Remove="Models\Login_EdiWeb\**" />
+    <None Remove="Models\Login_EdiWeb\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
