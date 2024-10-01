@@ -14,12 +14,13 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         private readonly UserManager<ApplicationUser>
             _userManager;
 
-        public ManageUsersController(UserManager<ApplicationUser> usrMgr)
+        private IPasswordHasher<ApplicationUser> passwordHasher;
+
+        public ManageUsersController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _userManager = usrMgr;
+            this.passwordHasher = passwordHasher;
         }
-
-
 
         //use the GetUserAsync method to retrieve an instance of ApplicationIdentityUser for the currently logged in user.
         //This means making the controller method asynchronous so that we can await the call to GetUserAsync 
@@ -53,7 +54,8 @@ namespace WebApplication_Edi_Web_2._0.Controllers
                 ApplicationUser appUser = new ApplicationUser
                 {
                     UserName = user.Name,
-                    Email = user.Email
+                    Email = user.Email,
+                    DescripUser = user.DescripUser
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
@@ -69,9 +71,51 @@ namespace WebApplication_Edi_Web_2._0.Controllers
             return View(user);
         }
 
+        //Update
 
+        public async Task<IActionResult> Update(string id)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+                return View(user);
+            else
+                return RedirectToAction("Index");
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Update(string id, string email, string password)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(email))
+                    user.Email = email;
+                else
+                    ModelState.AddModelError("", "Email cannot be empty");
 
+                if (!string.IsNullOrEmpty(password))
+                    user.PasswordHash = passwordHasher.HashPassword(user, password);
+                else
+                    ModelState.AddModelError("", "Password cannot be empty");
 
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+                {
+                    IdentityResult result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                        return RedirectToAction("Index");
+                    else
+                        Errors(result);
+                }
+            }
+            else
+                ModelState.AddModelError("", "User Not Found");
+            return View(user);
+        }
+
+        private void Errors(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+        }
     }
 }

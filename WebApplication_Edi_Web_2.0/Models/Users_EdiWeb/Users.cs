@@ -14,6 +14,7 @@ namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
 
             [Required]
             public string Password { get; set; }
+            public string? DescripUser { get; set; }
 
-        }
+    }
     }
