@@ -11,15 +11,14 @@ namespace WebApplication_Edi_Web_2._0.Controllers
     //[Authorize(Roles = "Admin")]
     public class ManageUsersController : Controller
     {
-        private readonly UserManager<ApplicationUser>
-            _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private IPasswordHasher<ApplicationUser> passwordHasher;
 
-        public ManageUsersController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHasher)
+        public ManageUsersController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHash)
         {
             _userManager = usrMgr;
-            this.passwordHasher = passwordHasher;
+            passwordHasher = passwordHash;
         }
 
         //use the GetUserAsync method to retrieve an instance of ApplicationIdentityUser for the currently logged in user.
@@ -53,7 +52,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers
             {
                 ApplicationUser appUser = new ApplicationUser
                 {
-                    UserName = user.Name,
+                    UserName = user.Email,
                     Email = user.Email,
                     DescripUser = user.DescripUser
                 };
@@ -72,7 +71,6 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         }
 
         //Update
-
         public async Task<IActionResult> Update(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
@@ -83,7 +81,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password)
+        public async Task<IActionResult> Update(string id, string email, string password, string DescripUser)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
@@ -98,7 +96,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers
                 else
                     ModelState.AddModelError("", "Password cannot be empty");
 
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(DescripUser))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
@@ -116,6 +114,25 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         {
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
+        }
+
+        // Delete
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                IdentityResult result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                    return RedirectToAction("Index");
+                else
+                    Errors(result);
+            }
+            else
+                ModelState.AddModelError("", "User Not Found");
+            return View("Index", _userManager.Users);
         }
     }
 }

@@ -23,14 +23,25 @@ namespace WebApplication_Edi_Web_2._0
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
+
             });
 
-            // Add Identity Framework Core & Setting for "ApplicationUser"
+            // Add Identity Framework Core & Setting for Identity "ApplicationUser"
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>()
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddDefaultTokenProviders()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
+
+            // Add Identity Setting for Username, Email, Password Policy
+
+            builder.Services.Configure<IdentityOptions>(opts =>
+            {
+                opts.User.RequireUniqueEmail = true;
+              //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+                opts.Password.RequiredLength = 8;
+                opts.Password.RequireLowercase = true;
+            });
 
             var app = builder.Build();
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
 
 /* This class "AppDbContext" extends "Entity Framework" represents a session with the database
-// and can be used to query and save instances of entities.*/
+// and can be used to our custom in the context so that in the migration the Framework user knows to make changes to the schema.*/
 
 namespace WebApplication_Edi_Web_2._0.Conf_Db_With_Entity
 {
