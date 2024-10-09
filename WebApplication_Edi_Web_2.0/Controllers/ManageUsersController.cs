@@ -13,12 +13,15 @@ namespace WebApplication_Edi_Web_2._0.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        private IPasswordHasher<ApplicationUser> passwordHasher;
+        private IPasswordHasher<ApplicationUser> _passwordHasher;
 
-        public ManageUsersController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHash)
+        private RoleManager<IdentityRole> _roleManager;
+
+        public ManageUsersController(UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHash, RoleManager<IdentityRole> roleMgr)
         {
             _userManager = usrMgr;
-            passwordHasher = passwordHash;
+            _passwordHasher = passwordHash;
+            _roleManager = roleMgr;
         }
 
         //use the GetUserAsync method to retrieve an instance of ApplicationIdentityUser for the currently logged in user.
@@ -60,12 +63,25 @@ namespace WebApplication_Edi_Web_2._0.Controllers
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
 
                 if (result.Succeeded)
-                    return RedirectToAction("Index");
+                {
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                    EmailHelper emailHelper = new EmailHelper();
+                    bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
+
+                    if (emailResponse)
+                        return RedirectToAction("Index");
+                    else
+                    {
+                        // log email failed 
+                    }
+                }
                 else
                 {
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
+                return View(user);
             }
             return View(user);
         }
@@ -92,7 +108,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers
                     ModelState.AddModelError("", "Email cannot be empty");
 
                 if (!string.IsNullOrEmpty(password))
-                    user.PasswordHash = passwordHasher.HashPassword(user, password);
+                    user.PasswordHash = _passwordHasher.HashPassword(user, password);
                 else
                     ModelState.AddModelError("", "Password cannot be empty");
 
