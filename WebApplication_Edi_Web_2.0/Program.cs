@@ -21,6 +21,12 @@ namespace WebApplication_Edi_Web_2._0
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
             });
 
+          /*.AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            });*/
+
+                // Add DbContext to represents a session with the database by Entity Framework Core.
 
                 // Add DbContext to represents a session with the database by Entity Framework Core.
 
@@ -61,6 +67,15 @@ namespace WebApplication_Edi_Web_2._0
                 options.SlidingExpiration = true;
             });
 
+            // Add Identity Framework Core & Setting for Identity Cookie expiry time
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = ".AspNetCore.Identity.Application";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.SlidingExpiration = true;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -81,10 +96,6 @@ namespace WebApplication_Edi_Web_2._0
 
             app.MapRazorPages ();
 
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
            /* app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -100,6 +111,20 @@ namespace WebApplication_Edi_Web_2._0
                 endpoints.MapDefaultControllerRoute();
 
             });*/
+            /*app.MapControllerRoute(
+                 name: "Bienvenida",
+                pattern: "{area:Defaultlogin}/{controller=login}/{action=index}/{id?}");
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.Run();
+
+            app.Run();*/
+
+
+             app.MapControllerRoute(
+                 name: "default",
+                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
              app.Run();
         }
