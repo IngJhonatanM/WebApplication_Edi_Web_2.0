@@ -27,4 +27,16 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Users\jhonatanm\source\repos\WebApplication_Edi_Web_2.0\WebApplication_Edi_Web_2.0\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Users\jhonatanm\source\repos\WebApplication_Edi_Web_2.0\WebApplication_Edi_Web_2.0\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\bootstrap\dist\css\_css_login\" />
+  </ItemGroup>
+
 </Project>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using WebApplication_Edi_Web_2._0.Conf_Db_With_Entity;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 
 namespace WebApplication_Edi_Web_2._0
 {
@@ -15,11 +16,15 @@ namespace WebApplication_Edi_Web_2._0
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddMvc().AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            });
 
 
-            // Add DbContext to represents a session with the database by Entity Framework Core.
+                // Add DbContext to represents a session with the database by Entity Framework Core.
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+                builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
@@ -38,9 +43,22 @@ namespace WebApplication_Edi_Web_2._0
             builder.Services.Configure<IdentityOptions>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
-              //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+            //   opts.SignIn.RequireConfirmedEmail = true;
+                //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 opts.Password.RequiredLength = 8;
                 opts.Password.RequireLowercase = true;
+            });
+
+            // Add Identity Framework Core & Setting for Identity Cookie expiry time
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = ".AspNetCore.Identity.Application";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.LoginPath = "/Identity/Account/Login";  //set the login page.
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
             });
 
             var app = builder.Build();
@@ -63,9 +81,26 @@ namespace WebApplication_Edi_Web_2._0
 
             app.MapRazorPages ();
 
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+           /* app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                     name: "default",
+                     pattern: "{area=Identity}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapRazorPages();
+
+                endpoints.MapControllerRoute(
+                 name: "pagehome",
+                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapDefaultControllerRoute();
+
+            });*/
 
             app.Run();
         }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
 {
@@ -77,11 +78,30 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first
+
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
 
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+            }
+
+
+            var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
+
+            if (providers.Any(_ => _ == "Email"))
+
+
+            {
+                // generate the 2fa token
+                var token = await _userManager.GenerateTwoFactorTokenAsync( user, "Email");
+
+
+                // send the user the 2fa token via email
+
+                EmailHelper emailHelper = new EmailHelper();
+                bool emailResponse = emailHelper.SendEmailTwoFactorCode(user.Email, token);
+
             }
 
             ReturnUrl = returnUrl;
@@ -100,6 +120,7 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+             
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
@@ -107,15 +128,20 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
 
             var authenticatorCode = Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
+            //     var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
 
+            var result = await _signInManager.TwoFactorSignInAsync("Email", authenticatorCode, false, false);
             var userId = await _userManager.GetUserIdAsync(user);
 
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
                 return LocalRedirect(returnUrl);
+                //return LocalRedirect("/ManageUsers");
+
+
             }
+
             else if (result.IsLockedOut)
             {
                 _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
