@@ -136,9 +136,8 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
-                return LocalRedirect(returnUrl);
-                //return LocalRedirect("/ManageUsers");
-
+              //  return LocalRedirect(returnUrl);
+               return LocalRedirect("/Home");
 
             }
 

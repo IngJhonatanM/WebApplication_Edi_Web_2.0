@@ -85,7 +85,6 @@ namespace WebApplication_Edi_Web_2._0
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
            /* app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -102,7 +101,7 @@ namespace WebApplication_Edi_Web_2._0
 
             });*/
 
-            app.Run();
+             app.Run();
         }
     }
 }

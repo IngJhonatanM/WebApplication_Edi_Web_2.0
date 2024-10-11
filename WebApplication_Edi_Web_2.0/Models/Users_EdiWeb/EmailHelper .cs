@@ -4,6 +4,8 @@ namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
 {
     public class EmailHelper
     {
+
+        // methods Confirm Email
         public bool SendEmail(string userEmail, string confirmationLink)
         {
             MailMessage mailMessage = new MailMessage();

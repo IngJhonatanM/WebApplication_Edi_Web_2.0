@@ -129,7 +129,7 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = "/home/index", id = Input.Email, Input.Password, Input.RememberMe });
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, id = Input.Email, Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
