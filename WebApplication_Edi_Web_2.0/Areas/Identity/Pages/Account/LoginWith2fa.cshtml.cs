@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
 {
+
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

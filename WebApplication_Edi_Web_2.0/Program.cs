@@ -16,25 +16,18 @@ namespace WebApplication_Edi_Web_2._0
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddAuthorization();
             builder.Services.AddMvc().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
             });
 
-          /*.AddRazorPagesOptions(options =>
+           // Add DbContext to represents a session with the database by Entity Framework Core.
+            builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-            });*/
-
-                // Add DbContext to represents a session with the database by Entity Framework Core.
-
-                // Add DbContext to represents a session with the database by Entity Framework Core.
-
-                builder.Services.AddDbContext<AppDbContext>(options =>
-            {
+                
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
-
             });
 
             // Add Identity Framework Core & Setting for Identity "ApplicationUser"
@@ -49,7 +42,7 @@ namespace WebApplication_Edi_Web_2._0
             builder.Services.Configure<IdentityOptions>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
-            //   opts.SignIn.RequireConfirmedEmail = true;
+                 //opts.SignIn.RequireConfirmedEmail = true;
                 //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 opts.Password.RequiredLength = 8;
                 opts.Password.RequireLowercase = true;
@@ -59,21 +52,13 @@ namespace WebApplication_Edi_Web_2._0
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = ".AspNetCore.Identity.Application";
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Name = ".AspNetCore.Identity.Application";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                options.LoginPath = "/Identity/Account/Login";  //set the login page.
+                options.SlidingExpiration = true;
+                options.LoginPath = "/Account/Login";  //set the login page.
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                options.SlidingExpiration = true;
-            });
-
-            // Add Identity Framework Core & Setting for Identity Cookie expiry time
-
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Name = ".AspNetCore.Identity.Application";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                options.SlidingExpiration = true;
+                
             });
 
             var app = builder.Build();
@@ -120,7 +105,6 @@ namespace WebApplication_Edi_Web_2._0
             app.Run();
 
             app.Run();*/
-
 
              app.MapControllerRoute(
                  name: "default",

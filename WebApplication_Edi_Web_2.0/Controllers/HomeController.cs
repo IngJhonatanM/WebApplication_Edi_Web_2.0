@@ -5,7 +5,11 @@ using WebApplication_Edi_Web_2._0.Models;
 
 namespace WebApplication_Edi_Web_2._0.Controllers
 {
+
+   // [Authorize(Roles = "User")]
     public class HomeController : Controller
+
+        
     {
         private readonly ILogger<HomeController> _logger;
 
