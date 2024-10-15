@@ -50,7 +50,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
 
         // Create User
 
-        public ViewResult Create() => View(_roleManager.Roles);
+        public ViewResult Create() => View();
 
         [HttpPost]
         public async Task<IActionResult> Create(Users user)
@@ -69,6 +69,8 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
 
                 if (result.Succeeded)
                 {
+                    // Set the user role
+                    await _userManager.AddToRoleAsync(appUser, "User");
 
 
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
