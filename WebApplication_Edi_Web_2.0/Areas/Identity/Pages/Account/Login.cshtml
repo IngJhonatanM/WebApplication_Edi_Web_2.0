@@ -5,27 +5,31 @@
     ViewData["Title"] = "Edi Bank";
 }
 
-<div class="row">
+<div class="wrapper d-flex justify-content-between">
+    <a class="d-flex align-items-center justify-content-center text-white text-decoration-none" href="/">
+        <img alt="Logo" class="img-fluid m-auto pt-sm-2" src="~/images/arasaka.png" style="height: 431px; width: 398.7;" />
+    </a>
+
     <v class="col-md-4 mx-auto rounded border p-3">
         <section>
-            <h2 class="text-center mb-3">Please Sign in</h2>
+            <h2 class="item d-flex flex-column">Sign in</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
             <form id="account" method="post">
-                
+
                 <div class="mb-3">
 
                     <label class="form-label">Email</label>
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    
+
                 </div>
 
                 <div class="mb-3">
 
                     <label class="form-label">Password</label>
-                    <input asp-for="Input.Password" class="form-control"/>
+                    <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
 
                 </div>
@@ -33,18 +37,13 @@
                 <div class=" row mb-3">
                     <div class="col d-grid">
 
-                        <button type="submit"  class="btn btn-primary">Log in</button>
+                        <button type="submit" class="btn btn-primary">Log in</button>
                     </div>
-                    <div class="col d-grid">
-
-                        <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
-                    </div>
-
                 </div>
-             
+
                 <div>
-                 <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                 </div>
             </form>
         </section>
-    </div>
+</div>

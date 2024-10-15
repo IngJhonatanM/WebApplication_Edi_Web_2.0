@@ -37,7 +37,7 @@ namespace WebApplication_Edi_Web_2._0
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
 
-            // Add Identity Setting for Username, Email, Password Policy
+            // Add Identity Setting for Username, Email, Password Policy, Lock & Unloc User Accounts
 
             builder.Services.Configure<IdentityOptions>(opts =>
             {
@@ -46,6 +46,11 @@ namespace WebApplication_Edi_Web_2._0
                 //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 opts.Password.RequiredLength = 8;
                 opts.Password.RequireLowercase = true;
+                opts.Lockout.AllowedForNewUsers = true;
+                opts.Lockout.MaxFailedAccessAttempts = 3;
+                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+
+                
             });
 
             // Add Identity Framework Core & Setting for Identity Cookie expiry time
@@ -54,7 +59,8 @@ namespace WebApplication_Edi_Web_2._0
             {
                 options.Cookie.Name = ".AspNetCore.Identity.Application";
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(3);
+                options.Cookie.MaxAge = options.ExpireTimeSpan;
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Account/Login";  //set the login page.
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
@@ -81,21 +87,21 @@ namespace WebApplication_Edi_Web_2._0
 
             app.MapRazorPages ();
 
-           /* app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                     name: "default",
-                     pattern: "{area=Identity}/{controller=Home}/{action=Index}/{id?}");
+            /* app.UseEndpoints(endpoints =>
+             {
+                 endpoints.MapControllerRoute(
+                      name: "default",
+                      pattern: "{area=Identity}/{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapRazorPages();
+                 endpoints.MapRazorPages();
 
-                endpoints.MapControllerRoute(
-                 name: "pagehome",
-                 pattern: "{controller=Home}/{action=Index}/{id?}");
+                 endpoints.MapControllerRoute(
+                  name: "pagehome",
+                  pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapDefaultControllerRoute();
+                 endpoints.MapDefaultControllerRoute();
 
-            });*/
+             });*/
             /*app.MapControllerRoute(
                  name: "Bienvenida",
                 pattern: "{area:Defaultlogin}/{controller=login}/{action=index}/{id?}");
@@ -106,11 +112,11 @@ namespace WebApplication_Edi_Web_2._0
 
             app.Run();*/
 
-             app.MapControllerRoute(
-                 name: "default",
-                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
-             app.Run();
+            app.Run();
         }
     }
 }

@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\bootstrap\dist\css\_css_login\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
