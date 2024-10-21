@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
 {
     public class Users
     {
+        
             [Required]
             public string Name { get; set; }
 

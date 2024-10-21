@@ -4,7 +4,7 @@
     ViewData["Title"] = "UPDATE USER";
 }
  
-<h1 class="bg-info text-white">Update User</h1>
+<h1 class="bg-body text-white"><strong>Update User</strong></h1>
 <a asp-action="Index" class="btn btn-secondary">Back</a>
 <div asp-validation-summary="All" class="text-danger"></div>
  
@@ -25,5 +25,6 @@
         <label asp-for="DescripUser">User Description</label>
         <input asp-for="DescripUser" class="form-control" />
     </div>
+    <br>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

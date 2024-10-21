@@ -121,6 +121,11 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                 else
                     ModelState.AddModelError("", "Password cannot be empty");
 
+                if (!string.IsNullOrEmpty(DescripUser))
+                    user.DescripUser = DescripUser;
+                else
+                    ModelState.AddModelError("", "DescripUser cannot be empty");
+
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(DescripUser))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(user);

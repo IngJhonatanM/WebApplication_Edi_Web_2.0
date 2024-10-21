@@ -31,7 +31,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         }
 
       
-        public IActionResult Privacy()
+        public IActionResult Salida()
 
         {
             return View();
