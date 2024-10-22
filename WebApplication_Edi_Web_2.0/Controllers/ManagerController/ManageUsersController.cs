@@ -62,7 +62,8 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                     UserName = user.Email,
                     Email = user.Email,
                     DescripUser = user.DescripUser,
-                    TwoFactorEnabled = true
+                    TwoFactorEnabled = true,
+                    EmailConfirmed = true
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
@@ -71,26 +72,24 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                 {
                     // Set the user role
                     await _userManager.AddToRoleAsync(appUser, "User");
+                  //  var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                  //  var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                 //   EmailHelper emailHelper = new EmailHelper();
+                  //  bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
 
-
-                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
-                    EmailHelper emailHelper = new EmailHelper();
-                    bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
-
-                    if (emailResponse)
-                        return RedirectToAction("Index");
-                    else
-                    {
+                  //  if (emailResponse)
+                       // return RedirectToAction("Index");
+                   // else
+                 //   {
                         // log email failed 
-                    }
+                   // }
                 }
                 else
                 {
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
-                return View(user);
+                return RedirectToAction("Index");
             }
             return View(user);
         }

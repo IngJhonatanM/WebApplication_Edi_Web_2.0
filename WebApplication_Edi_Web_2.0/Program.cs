@@ -37,7 +37,7 @@ namespace WebApplication_Edi_Web_2._0
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
 
-            // Add Identity Setting for Username, Email, Password Policy, Lock & Unloc User Accounts
+            // Add Identity Setting for Username (Email) , Password Policy, Lock & Unloc User Accounts
 
             builder.Services.Configure<IdentityOptions>(opts =>
             {
@@ -45,20 +45,27 @@ namespace WebApplication_Edi_Web_2._0
                  //opts.SignIn.RequireConfirmedEmail = true;
                 //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 opts.Password.RequiredLength = 8;
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireNonAlphanumeric = true;
                 opts.Password.RequireLowercase = true;
+                opts.Password.RequireUppercase = true;
                 opts.Lockout.AllowedForNewUsers = true;
                 opts.Lockout.MaxFailedAccessAttempts = 3;
                 opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
 
-                
             });
 
-            // Add Identity Framework Core & Setting for Identity Cookie expiry time
+            // Add Setting for Identity the time of token validity
+           // builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
+
+            // Add Identity Framework Core & Setting for Identity Cookie
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = ".AspNetCore.Identity.Application";
                 options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(3);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;
                 options.SlidingExpiration = true;
