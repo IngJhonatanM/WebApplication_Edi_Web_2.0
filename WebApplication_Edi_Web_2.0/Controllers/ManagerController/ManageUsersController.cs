@@ -105,27 +105,29 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password, string DescripUser)
+        public async Task<IActionResult> Update(string id, string email, string? password, string DescripUser)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 if (!string.IsNullOrEmpty(email))
                     user.Email = email;
-                else
-                    ModelState.AddModelError("", "Email cannot be empty");
-
-                if (!string.IsNullOrEmpty(password))
-                    user.PasswordHash = _passwordHasher.HashPassword(user, password);
-                else
-                    ModelState.AddModelError("", "Password cannot be empty");
 
                 if (!string.IsNullOrEmpty(DescripUser))
                     user.DescripUser = DescripUser;
+
                 else
                     ModelState.AddModelError("", "DescripUser cannot be empty");
 
-                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(DescripUser))
+                if (!string.IsNullOrEmpty(password))
+                
+                    user.PasswordHash = _passwordHasher.HashPassword(user, password);
+                    IdentityResult resultadoPass = await _userManager.UpdateAsync(user);
+
+                if (resultadoPass.Succeeded)
+                    return RedirectToAction("Index");
+  
+                if (!string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(DescripUser))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
@@ -163,5 +165,39 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                 ModelState.AddModelError("", "User Not Found");
             return View("Index", _userManager.Users);
         }
+
+        // UnBlockUser
+
+        //  [HttpPost]
+            public async Task<IActionResult> UnblockUser(string id)
+
+             {
+                 // Encuentra al usuario por su ID
+                 ApplicationUser user  = await _userManager.FindByIdAsync(id);
+
+                 if (user == null)
+                 {
+                     // Manejar el caso en que el usuario no se encuentra
+                     return NotFound();
+                 }
+
+                 // Verificar si el usuario está bloqueado
+                 if (await _userManager.IsLockedOutAsync(user))
+                 {
+                     // Desbloquear al usuario
+                     await _userManager.SetLockoutEnabledAsync(user, false);
+                     await _userManager.ResetAccessFailedCountAsync(user);
+
+                     // Agregar un mensaje de éxito o redireccionar a una página de confirmación
+                     return RedirectToAction("Index", "ManageUsers", new { message = "Usuario desbloqueado correctamente" });
+                 }
+                 else
+                 {
+                     // Agregar un mensaje de error indicando que el usuario no estaba bloqueado
+                     return RedirectToAction("Index", "ManageUsers", new { message = "El usuario ya no estaba bloqueado" });
+                 }
+             }
+
+
     }
 }
