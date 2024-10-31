@@ -69,8 +69,8 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-        //  [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+            [Required(ErrorMessage = "Por favor, ingresa tu email. ")]
+            [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail no es valido")]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -78,7 +78,7 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Por favor, ingresa tu contraseña. ")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -138,7 +138,7 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Intento de inicio de sesió invalido, porfavor revisar tus datos.");
                     return Page();
                 }
             }

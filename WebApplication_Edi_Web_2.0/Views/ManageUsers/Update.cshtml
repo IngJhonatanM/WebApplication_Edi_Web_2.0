@@ -3,9 +3,11 @@
 @{
     ViewData["Title"] = "UPDATE USER";
 }
- 
-<h1 class="bg-body text-white"><strong>Update User</strong></h1>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+<h1 class="bg-body text-white"><strong>Actualizar</strong></h1>
+<a asp-action="Index" class="btn btn-secondary">
+   <i class="bi bi-back"></i>Volver
+    </a>
 <div asp-validation-summary="All" class="text-danger"></div>
  
 <form asp-action="Update" method="post">
@@ -18,17 +20,19 @@
         <input asp-for="Email" class="form-control" />
     </div>
     <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Contraseña</label>
         <input name="password" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="DescripUser">User Description</label>
+        <label asp-for="DescripUser">Descripción De Usuarios</label>
         <input asp-for="DescripUser" class="form-control" />
     </div>
     <br>
     <div class="form-group">
-        <a asp-controller="ManageUsers" asp-action="UnblockUser" asp-route-id="@Model.Id" class="btn btn-outline-success">Unlock user</a>
+        <a asp-controller="ManageUsers" asp-action="UnblockUser" asp-route-id="@Model.Id" class="btn btn-outline-success">
+          <i class="bi bi-arrow-clockwise"></i>  Desbloquear Usuario
+            </a>
     </div>
     <br>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Guardar</button>
 </form>

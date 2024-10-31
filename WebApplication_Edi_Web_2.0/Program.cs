@@ -22,10 +22,10 @@ namespace WebApplication_Edi_Web_2._0
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
             });
 
-           // Add DbContext to represents a session with the database by Entity Framework Core.
+            // Add DbContext to represents a session with the database by Entity Framework Core.
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                
+
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
@@ -42,7 +42,7 @@ namespace WebApplication_Edi_Web_2._0
             builder.Services.Configure<IdentityOptions>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
-                 //opts.SignIn.RequireConfirmedEmail = true;
+                //opts.SignIn.RequireConfirmedEmail = true;
                 //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                 opts.Password.RequiredLength = 8;
                 opts.Password.RequireDigit = true;
@@ -50,13 +50,13 @@ namespace WebApplication_Edi_Web_2._0
                 opts.Password.RequireLowercase = true;
                 opts.Password.RequireUppercase = true;
                 opts.Lockout.AllowedForNewUsers = true;
+                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                 opts.Lockout.MaxFailedAccessAttempts = 3;
-                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
 
             });
 
             // Add Setting for Identity the time of token validity
-           // builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
+            // builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
             // Add Identity Framework Core & Setting for Identity Cookie
 
@@ -71,7 +71,7 @@ namespace WebApplication_Edi_Web_2._0
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Account/Login";  //set the login page.
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                
+
             });
 
             var app = builder.Build();
@@ -92,7 +92,7 @@ namespace WebApplication_Edi_Web_2._0
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapRazorPages ();
+            app.MapRazorPages();
 
             /* app.UseEndpoints(endpoints =>
              {

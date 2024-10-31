@@ -47,7 +47,7 @@ namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
             mailMessage.Body = code;
 
             SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential("relay@eniac.com", "Lol11473");
+            client.Credentials = new System.Net.NetworkCredential("relay@eniac.com", "/TuPsy98\\1i");
             client.Host = "outlook.office365.com";
             client.Port = 587;
             client.EnableSsl = true;
@@ -77,7 +77,7 @@ namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
             mailMessage.Body = link;
 
             SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential("relay@eniac.com", "Lol11473");
+            client.Credentials = new System.Net.NetworkCredential("relay@eniac.com", "/TuPsy98\\1i");
             client.Host = "outlook.office365.com";
             client.Port = 587;
             client.EnableSsl = true;

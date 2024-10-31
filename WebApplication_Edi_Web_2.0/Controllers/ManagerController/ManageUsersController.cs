@@ -63,7 +63,8 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                     Email = user.Email,
                     DescripUser = user.DescripUser,
                     TwoFactorEnabled = true,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    LockoutEnabled = true
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
@@ -185,11 +186,16 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                  if (await _userManager.IsLockedOutAsync(user))
                  {
                      // Desbloquear al usuario
-                     await _userManager.SetLockoutEnabledAsync(user, false);
+                   //  await _userManager.SetLockoutEnabledAsync(user, false);
                      await _userManager.ResetAccessFailedCountAsync(user);
+                // Volver a habilitar el bloqueo para futuros intentos fallidos
+                     await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(1));
 
-                     // Agregar un mensaje de éxito o redireccionar a una página de confirmación
-                     return RedirectToAction("Index", "ManageUsers", new { message = "Usuario desbloqueado correctamente" });
+                // Actualizar la última fecha de inicio de sesión para reiniciar el temporizador de bloqueo
+                await _userManager.UpdateSecurityStampAsync(user);
+
+                // Agregar un mensaje de éxito o redireccionar a una página de confirmación
+                return RedirectToAction("Index", "ManageUsers", new { message = "Usuario desbloqueado correctamente" });
                  }
                  else
                  {
@@ -197,7 +203,6 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                      return RedirectToAction("Index", "ManageUsers", new { message = "El usuario ya no estaba bloqueado" });
                  }
              }
-
 
     }
 }
