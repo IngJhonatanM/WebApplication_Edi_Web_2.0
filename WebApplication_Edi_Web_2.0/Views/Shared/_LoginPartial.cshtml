@@ -6,6 +6,7 @@
 @inject UserManager<ApplicationUser> UserManager
 <a id="myId"></a>
 <a id="demo"></a>
+<br />
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
     {
@@ -24,18 +25,19 @@
             var dd = date.getDate();
             var mm = date.getMonth() + 1;
             var yyyy = date.getFullYear();
-            var newDate = dd + "-" + mm + "-" +yyyy;
+            var newDate = new Date().toLocaleDateString('es-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"})
             var time = " |  "
+            var formata = "&#8232";
             var p = document.getElementById("myId");
-            p.innerHTML = newDate + " " + time;
+            p.innerHTML = newDate + "&#32" + time + formata;
         </script>
-
+    
     <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Saludos @UserManager.GetUserName(User)!</a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Salir</button>
         </form>
     </li>
 }
