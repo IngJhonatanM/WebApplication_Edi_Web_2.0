@@ -6,10 +6,9 @@ using WebApplication_Edi_Web_2._0.Models;
 namespace WebApplication_Edi_Web_2._0.Controllers
 {
 
-   // [Authorize(Roles = "User")]
+   [Authorize(Roles = "User")]
     public class HomeController : Controller
 
-        
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -25,13 +24,33 @@ namespace WebApplication_Edi_Web_2._0.Controllers
         {
             return View((object)"Hello");
         }
+
+      //  [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
-      
+        public IActionResult Entrada()
+        {
+            return View();
+        }
+
         public IActionResult Salida()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Contact()
+
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+
+        public IActionResult _SessionExpireNotification()
 
         {
             return View();

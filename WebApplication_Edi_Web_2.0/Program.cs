@@ -4,6 +4,7 @@ using WebApplication_Edi_Web_2._0.Conf_Db_With_Entity;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.CodeAnalysis.Options;
 
 namespace WebApplication_Edi_Web_2._0
 {
@@ -16,6 +17,9 @@ namespace WebApplication_Edi_Web_2._0
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(2);
+            });
             builder.Services.AddAuthorization();
             builder.Services.AddMvc().AddRazorPagesOptions(options =>
             {
@@ -66,7 +70,7 @@ namespace WebApplication_Edi_Web_2._0
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(3);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Account/Login";  //set the login page.
@@ -90,6 +94,7 @@ namespace WebApplication_Edi_Web_2._0
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseSession();
             app.UseAuthorization();
 
             app.MapRazorPages();

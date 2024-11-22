@@ -138,7 +138,7 @@ namespace WebApplication_Edi_Web_2._0.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Intento de inicio de sesió invalido, porfavor revisar tus datos.");
+                    ModelState.AddModelError(string.Empty, "Intento de inicio de sesión invalido, porfavor revisar tus datos.");
                     return Page();
                 }
             }
