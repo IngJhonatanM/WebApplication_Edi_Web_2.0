@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
+﻿namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
 {
     public class ManageUsersViewModel
     {

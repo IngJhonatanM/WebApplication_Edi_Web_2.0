@@ -1,21 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication_Edi_Web_2._0.Models.Users_EdiWeb
 {
     public class Users
     {
-            [Required(ErrorMessage = "Por favor, ingresar nombre. ")]
-            public string Name { get; set; }
+        [Display(Name = "Nombre de usuario")]
+        [Required(ErrorMessage = "Por favor, ingresar nombre. ")]
+        public required string Name { get; init; }
 
-            [Required(ErrorMessage = "Por favor, ingresar email. ")]
-            public string? Email { get; set; }
+        [Display(Name = "Correo electrónico")]
+        [Required(ErrorMessage = "Por favor, ingresar email. ")]
+        public string? Email { get; set; }
 
-            [Required(ErrorMessage = "Por favor, ingresar Contraseña. ")]
-            public string Password { get; set; }
-            public string? DescripUser { get; set; }
+        [Display(Name = "Contraseña")]
+        [Required(ErrorMessage = "Por favor, ingresar Contraseña. ")]
+        public required string Password { get; init; }
 
+        [Display(Name = "Descripción de usuario")]
+        public string? DescripUser { get; set; }
+
+        public  string? EDIId { get; init; }
+
+        [Display(Name = "EDI asociado")]
+        public  SelectList? EDIs { get; init; }
     }
-    }
+}

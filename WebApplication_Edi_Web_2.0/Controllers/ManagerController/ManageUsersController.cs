@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
 
@@ -8,7 +9,7 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
 {
 
     // Instance of the ASP.NET Core Identity UserManager available in the controller
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ManageUsersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -50,18 +51,35 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
 
         // Create User
 
-        public ViewResult Create() => View();
+        public IActionResult Create() => View(new Users
+        {
+            Name = "",
+            Email = "",
+            Password = "",
+            DescripUser = "",
+            EDIs = new(items: new List<SelectListItem>
+                       {
+                           new() { Text = "Provincial", Value = "BBVA" },
+                           new() { Text = "Mercantil", Value = "BM" },
+                           new() { Text = "Venezuela", Value = "BDV" }
+                       },
+                       dataTextField: "Text",
+                       dataValueField: "Value",
+                       selectedValue: "BM"),
+            EDIId = "BM"
+        });
 
         [HttpPost]
         public async Task<IActionResult> Create(Users user)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser appUser = new ApplicationUser
+                ApplicationUser appUser = new()
                 {
                     UserName = user.Email,
                     Email = user.Email,
                     DescripUser = user.DescripUser,
+                    EDIId = user.EDIId,
                     TwoFactorEnabled = true,
                     EmailConfirmed = true,
                     LockoutEnabled = true
@@ -73,17 +91,17 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                 {
                     // Set the user role
                     await _userManager.AddToRoleAsync(appUser, "User");
-                  //  var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                  //  var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
-                 //   EmailHelper emailHelper = new EmailHelper();
-                  //  bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
+                    //  var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                    //  var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                    //   EmailHelper emailHelper = new EmailHelper();
+                    //  bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
 
-                  //  if (emailResponse)
-                       // return RedirectToAction("Index");
-                   // else
-                 //   {
-                        // log email failed 
-                   // }
+                    //  if (emailResponse)
+                    // return RedirectToAction("Index");
+                    // else
+                    //   {
+                    // log email failed 
+                    // }
                 }
                 else
                 {
@@ -121,13 +139,13 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
                     ModelState.AddModelError("", "DescripUser cannot be empty");
 
                 if (!string.IsNullOrEmpty(password))
-                
+
                     user.PasswordHash = _passwordHasher.HashPassword(user, password);
-                    IdentityResult resultadoPass = await _userManager.UpdateAsync(user);
+                IdentityResult resultadoPass = await _userManager.UpdateAsync(user);
 
                 if (resultadoPass.Succeeded)
                     return RedirectToAction("Index");
-  
+
                 if (!string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(DescripUser))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(user);
@@ -170,39 +188,39 @@ namespace WebApplication_Edi_Web_2._0.Controllers.ManagerController
         // UnBlockUser
 
         //  [HttpPost]
-            public async Task<IActionResult> UnblockUser(string id)
+        public async Task<IActionResult> UnblockUser(string id)
 
-             {
-                 // Encuentra al usuario por su ID
-                 ApplicationUser user  = await _userManager.FindByIdAsync(id);
+        {
+            // Encuentra al usuario por su ID
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
 
-                 if (user == null)
-                 {
-                     // Manejar el caso en que el usuario no se encuentra
-                     return NotFound();
-                 }
+            if (user == null)
+            {
+                // Manejar el caso en que el usuario no se encuentra
+                return NotFound();
+            }
 
-                 // Verificar si el usuario está bloqueado
-                 if (await _userManager.IsLockedOutAsync(user))
-                 {
-                     // Desbloquear al usuario
-                   //  await _userManager.SetLockoutEnabledAsync(user, false);
-                     await _userManager.ResetAccessFailedCountAsync(user);
+            // Verificar si el usuario está bloqueado
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                // Desbloquear al usuario
+                //  await _userManager.SetLockoutEnabledAsync(user, false);
+                await _userManager.ResetAccessFailedCountAsync(user);
                 // Volver a habilitar el bloqueo para futuros intentos fallidos
-                     await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(1));
+                await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(1));
 
                 // Actualizar la última fecha de inicio de sesión para reiniciar el temporizador de bloqueo
                 await _userManager.UpdateSecurityStampAsync(user);
 
                 // Agregar un mensaje de éxito o redireccionar a una página de confirmación
                 return RedirectToAction("Index", "ManageUsers", new { message = "Usuario desbloqueado correctamente" });
-                 }
-                 else
-                 {
-                     // Agregar un mensaje de error indicando que el usuario no estaba bloqueado
-                     return RedirectToAction("Index", "ManageUsers", new { message = "El usuario ya no estaba bloqueado" });
-                 }
-             }
+            }
+            else
+            {
+                // Agregar un mensaje de error indicando que el usuario no estaba bloqueado
+                return RedirectToAction("Index", "ManageUsers", new { message = "El usuario ya no estaba bloqueado" });
+            }
+        }
 
     }
 

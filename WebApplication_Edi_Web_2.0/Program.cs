@@ -1,10 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebApplication_Edi_Web_2._0.Conf_Db_With_Entity;
 using WebApplication_Edi_Web_2._0.Models.Users_EdiWeb;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.CodeAnalysis.Options;
 
 namespace WebApplication_Edi_Web_2._0
 {
@@ -17,7 +15,8 @@ namespace WebApplication_Edi_Web_2._0
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            builder.Services.AddSession(options => {
+            builder.Services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromMinutes(2);
             });
             builder.Services.AddAuthorization();
@@ -94,26 +93,40 @@ namespace WebApplication_Edi_Web_2._0
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.Use(async (context, next) =>
+              {
+                try
+                    {
+                     await next(context);
+                     }
+                catch (Exception e) {
+                         context.Response.StatusCode = 500;
+                         context.Response.ContentType = "text/html";
+                         context.Response.Redirect("/Home/Error");
+           /*              await context.Response.WriteAsync("<html lang=\"en\"><body>\r\n");
+                         await context.Response.WriteAsync("<h1>ERROR!</h1><br><br>\r\n");
+                        var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+                        if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
+                        {
+                            await context.Response.WriteAsync(
+                                                      "File error thrown!<br><br>\r\n");
+                        }
+
+                        await context.Response.WriteAsync("<a href=\"/\">Home</a><br>\r\n");
+                        await context.Response.WriteAsync("</body></html>\r\n");
+                        await context.Response.WriteAsync(new string(' ', 512));*/
+
+                     }
+
+                 });
+
             app.UseSession();
             app.UseAuthorization();
 
             app.MapRazorPages();
 
-            /* app.UseEndpoints(endpoints =>
-             {
-                 endpoints.MapControllerRoute(
-                      name: "default",
-                      pattern: "{area=Identity}/{controller=Home}/{action=Index}/{id?}");
-
-                 endpoints.MapRazorPages();
-
-                 endpoints.MapControllerRoute(
-                  name: "pagehome",
-                  pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                 endpoints.MapDefaultControllerRoute();
-
-             });*/
             /*app.MapControllerRoute(
                  name: "Bienvenida",
                 pattern: "{area:Defaultlogin}/{controller=login}/{action=index}/{id?}");

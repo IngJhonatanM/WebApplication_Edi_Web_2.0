@@ -5,8 +5,10 @@ using WebApplication_Edi_Web_2._0.Models;
 
 namespace WebApplication_Edi_Web_2._0.Controllers
 {
+    //  [Authorize(Roles = "User")]
+    //  [Authorize(Roles = "Admin")]
 
-   [Authorize(Roles = "User")]
+        [Authorize]
     public class HomeController : Controller
 
     {
@@ -25,17 +27,19 @@ namespace WebApplication_Edi_Web_2._0.Controllers
             return View((object)"Hello");
         }
 
-      //  [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult Entrada()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult Salida()
         {
             return View();
