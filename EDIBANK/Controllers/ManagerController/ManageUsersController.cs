@@ -9,7 +9,7 @@ namespace EDIBANK.Controllers.ManagerController;
 
 
 // Instance of the ASP.NET Core Identity UserManager available in the controller
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class ManageUsersController(AppDbContext context, UserManager<ApplicationUser> usrMgr, IPasswordHasher<ApplicationUser> passwordHash, RoleManager<IdentityRole> roleMgr) : Controller
 {
     private readonly AppDbContext _context = context;
@@ -40,73 +40,68 @@ public class ManageUsersController(AppDbContext context, UserManager<Application
         return View(model);
     }
 
-
     // Get all Identity Roles
 
-
     // Create User
-
-    public async Task<IActionResult> CreateAsync() => View(new Users
+    public async Task<IActionResult> CreateAsync()
     {
-        Name = "",
-        Email = null,
-        Password = "",
-        DescripUser = null,
-        //EDIs = new(items: new List<SelectListItem>
-        //           {
-        //               new() { Text = "Provincial", Value = "BBVA" },
-        //               new() { Text = "Mercantil", Value = "BM" },
-        //               new() { Text = "Venezuela", Value = "BDV" }
-        //           },
-        //           dataTextField: "Text",
-        //           dataValueField: "Value",
-        //           selectedValue: "BM"),
-        EDIs = await _context.EDISelectorAsync("COBECA"),
-        EDIId = "COBECA"
-    });
+        string ediId = (await _context.EDISelectorAsync()).First().Value;
+
+        return View(new Users
+        {
+            Name = "",
+            Email = null,
+            Password = "",
+            DescripUser = null,
+            EDIs = await _context.EDISelectorAsync(ediId),
+            EDIId = ediId
+        });
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Users user)
+    public async Task<IActionResult> CreateAsync(Users user)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            ApplicationUser appUser = new()
-            {
-                UserName = user.Email,
-                Email = user.Email,
-                DescripUser = user.DescripUser,
-                EDIId = user.EDIId,
-                TwoFactorEnabled = true,
-                EmailConfirmed = true,
-                LockoutEnabled = true
-            };
-
-            IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
-
-            if (result.Succeeded)
-            {
-                // Set the user role
-                await _userManager.AddToRoleAsync(appUser, "User");
-                //  var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                //  var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
-                //   EmailHelper emailHelper = new EmailHelper();
-                //  bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
-
-                //  if (emailResponse)
-                // return RedirectToAction("Index");
-                // else
-                //   {
-                // log email failed 
-                // }
-            }
-            else
-            {
-                foreach (IdentityError error in result.Errors)
-                    ModelState.AddModelError("", error.Description);
-            }
-            return RedirectToAction("Index");
+            user.EDIs = await _context.EDISelectorAsync(user.EDIId);
+            return View(user);
         }
-        return View(user);
+
+        ApplicationUser appUser = new()
+        {
+            UserName = user.Email,
+            Email = user.Email,
+            DescripUser = user.DescripUser,
+            EDIId = user.EDIId,
+            TwoFactorEnabled = true,
+            EmailConfirmed = true,
+            LockoutEnabled = true
+        };
+        IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+
+        if (result.Succeeded)
+        {
+            // Set the user role
+            await _userManager.AddToRoleAsync(appUser, "User");
+
+            //  var token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+            //  var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+            //   EmailHelper emailHelper = new EmailHelper();
+            //  bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
+
+            //  if (emailResponse)
+            // return RedirectToAction("Index");
+            // else
+            //   {
+            // log email failed 
+            // }
+        }
+        else
+        {
+            foreach (IdentityError error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+        }
+        return RedirectToAction("Index");
     }
 
     //Update

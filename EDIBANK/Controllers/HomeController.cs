@@ -33,18 +33,6 @@ namespace EDIBANK.Controllers
             return View();
         }
 
-        [Authorize]
-        public IActionResult Entrada()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public IActionResult Salida()
-        {
-            return View();
-        }
-
         [AllowAnonymous]
         public IActionResult Contact()
 

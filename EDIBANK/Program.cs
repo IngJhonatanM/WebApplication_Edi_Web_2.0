@@ -16,7 +16,7 @@ namespace EDIBANK
             builder.Services.AddRazorPages();
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(2);
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
             builder.Services.AddAuthorization();
             builder.Services.AddMvc().AddRazorPagesOptions(options =>
@@ -68,7 +68,7 @@ namespace EDIBANK
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Account/Login";  //set the login page.

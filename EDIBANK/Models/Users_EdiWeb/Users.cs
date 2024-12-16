@@ -23,6 +23,6 @@ namespace EDIBANK.Models.Users_EdiWeb
         public string? EDIId { get; init; }
 
         [Display(Name = "EDI asociado")]
-        public SelectList? EDIs { get; init; }
+        public SelectList? EDIs { get; set; }
     }
 }

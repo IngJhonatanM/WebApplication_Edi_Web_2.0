@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EDIBANK.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/forma-geometrica-hexagonal.ico">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
             <!-- <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #c0d9ec;"> -->
             <div class="container-fluid">
-             <a class="navbar-brand" href="/Home/Entrada">EDIB@NK</a>
-             <!--  <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EDIBANK</a>   -->  
+                <a class="navbar-brand" href="/Monitor/Monitor">EDIB@NK</a>
+                <!--  <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EDIBANK</a>   -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,33 +25,28 @@
                         @if (Context.User.IsInRole("User"))
                         {
                             <li class="nav-item nav-tabs border">
-                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Home" asp-action="Entrada">Entrada</a>
-                        </li>
-                           <li class="nav-item nav-tabs border">
-                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Home" asp-action="Salida">Salida</a>
-                               
+                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Monitor" asp-action="Monitor" asp-route-mostrarentradas="true">Entrada</a>
+                            </li>
+                            <li class="nav-item nav-tabs border">
+                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Monitor" asp-action="Monitor" asp-route-mostrarentradas="false">Salida</a>
                             </li>
                         }
-
                         @if (Context.User.IsInRole("Admin"))
                         {
                             <li class="nav-item nav-tabs border">
-                               
                                 <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="ManageUsers" asp-action="index">Mantenimiento de Usuarios</a>
                             </li>
 
                             <li class="nav-item nav-tabs border">
-                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Home" asp-action="Entrada">Entrada</a>
+                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Monitor" asp-action="Monitor" asp-route-mostrarentradas="true">Entrada</a>
                                 <!-- <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> -->
                             </li>
                             <li class="nav-item nav-tabs border">
-                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Home" asp-action="Salida">Salida</a>
-                                
+                                <a class="nav-item nav-link text-dark list-group-item list-group-item-action list-group-item-primary" asp-area="" asp-controller="Monitor" asp-action="Monitor" asp-route-mostrarentradas="false">Salida</a>
                             </li>
-                        }  
-
+                        }
                     </ul>
-                      <partial name="_Loginpartial" />
+                    <partial name="_Loginpartial" />
                 </div>
             </div>
         </nav>
@@ -65,7 +61,7 @@
         <script>
             (function() {
 
-                const idleDurationSecs = 120;    // X number of seconds
+                const idleDurationSecs = 600;    // X number of seconds
                 const redirectUrl = '/Home/_SessionExpireNotification';  // Redirect idle users to this URL
                 let IdleTimeout; // variable to hold the timeout, do not modify
 

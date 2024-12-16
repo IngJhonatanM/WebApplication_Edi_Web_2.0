@@ -132,7 +132,7 @@ namespace EDIBANK.Areas.Identity.Pages.Account
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
                 //  return LocalRedirect(returnUrl);
-                return LocalRedirect("/Home/Entrada");
+                return LocalRedirect("/Monitor/Monitor");
 
             }
 

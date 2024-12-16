@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EDIBANK.Models.Monitor;
 
 public class MonitorViewModel
 {
     public required IEnumerable<Intercambio> Intercambios { get; set; }
-
-    public required SelectList EDIs { get; set; }
-
-    public required string EDIActual { get; set; }
 
     public required DateTime Menor { get; init; }
 

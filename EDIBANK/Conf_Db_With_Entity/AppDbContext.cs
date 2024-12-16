@@ -1,12 +1,10 @@
 ﻿using EDIBANK.Models.Monitor;
 using EDIBANK.Models.Users_EdiWeb;
-using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Runtime.CompilerServices;
 
 /* This class "AppDbContext" extends "Entity Framework" represents a session with the database
 // and can be used to our custom in the context so that in the migration the Framework user knows to make changes to the schema.*/
@@ -54,21 +52,6 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<Applicat
         dataValueField: nameof(EDI.Id),
         dataTextField: nameof(EDI.Descripcion),
         selectedValue: selectedValue);
-
-    public async Task AuditarAsync<T>(HttpContext httpContext, string? comentario = null, [CallerMemberName] string? memberName = null)
-    {
-        Add(new Auditoria
-        {
-            Fecha = DateTime.Now,
-            Usuario = "username".Truncate(50),
-            IPRemota = $"{httpContext.Connection.RemoteIpAddress?.MapToIPv4()}/{httpContext.Connection.RemoteIpAddress?.MapToIPv6()}".Truncate(50),
-            Modulo = typeof(T).FullName.Truncate(50),
-            Operacion = memberName.Truncate(50),
-            Comentario = comentario.Truncate(50)
-        });
-        await SaveChangesAsync();
-    }
-
 
     public required DbSet<Intercambio> Intercambios { get; set; }
     public required DbSet<HistoricoIntercambio> HistoricoIntercambios { get; set; }
