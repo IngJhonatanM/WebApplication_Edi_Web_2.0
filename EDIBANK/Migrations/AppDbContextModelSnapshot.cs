@@ -34,7 +34,7 @@ namespace EDIBANK.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Comentario")
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(250)")
                         .HasColumnName("comentarios")
                         .HasColumnOrder(6);
 
@@ -44,7 +44,7 @@ namespace EDIBANK.Migrations
                         .HasColumnOrder(1);
 
                     b.Property<string>("IPRemota")
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(39)")
                         .HasColumnName("ip_remota")
                         .HasColumnOrder(3);
 
@@ -366,13 +366,13 @@ namespace EDIBANK.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f863b756-0d6e-4649-bc9a-0b5fc3ad9c1a",
+                            Id = "72cddec6-1b66-4830-9f41-1843fdc3ae25",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "f007f8e5-f114-4520-b016-010f3e3ebcfe",
+                            Id = "8b30ae2b-a633-421a-9852-58c3e4d86b08",
                             Name = "User",
                             NormalizedName = "User"
                         });
